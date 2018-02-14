@@ -1,0 +1,49 @@
+#!/sbin/openrc-run
+# Copyright 1999-2018 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+description="Automatic Display Manager"
+command="/usr/sbin/nodm"
+command_args="${NODM_OPTIONS}"
+pidfile="/var/run/nodm"
+
+# Note: requires environment settings in /etc/env.d/70nodm
+
+check_env() {
+	if [ ! -n "${NODM_XSESSION}" ]; then
+		eerror "No Xsession environment found!"
+		return 1
+	fi
+
+	return 0
+}
+
+depend() {
+	need localmount
+	use logger
+	after bootmisc consolefont modules netmount
+	after readahead-list ypbind autofs openvpn gpm lircmd
+	after quota keymaps
+	before alsasound
+
+	# Start before X
+	use consolekit dbus xfs
+}
+
+start() {
+	check_env || return 1
+
+	start-stop-daemon --quiet --start \
+		--background \
+		--make-pidfile \
+		--exec "${command}" \
+		--pidfile "${pidfile}"
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping nodm"
+	start-stop-daemon --quiet --stop \
+		--pidfile "${pidfile}"
+	eend $?
+}
