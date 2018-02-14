@@ -47,7 +47,6 @@ src_unpack() {
 }
 
 src_configure() {
-	# see BUILDING document for explanation of options
 	export \
 		PREFIX="${EPREFIX}/usr" \
 		LIBDIR="${EPREFIX}/usr/$(get_libdir)" \
