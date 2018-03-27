@@ -1,0 +1,61 @@
+--- SConstruct.orig	2018-03-26 22:59:25.952114837 -0700
++++ SConstruct	2018-03-26 23:00:44.738780741 -0700
+@@ -81,12 +81,12 @@
+ 
+ def CheckForQtAt(context, qtdir):
+   context.Message('Checking for Qt at %s... ' % qtdir)
+-  libp = os.path.join(qtdir, 'lib')
+-  cppp = os.path.join(qtdir, 'include')
++  libp = os.path.join(qtdir, 'lib/qt4')
++  cppp = os.path.join(qtdir, 'include/qt4')
+   result = AttemptLinkWithVariables(context,
+       { "LIBS": "qt-mt", "LIBPATH": libp , "CPPPATH": cppp },
+       """
+-#include <qapplication.h>
++#include <QtGui/qapplication.h>
+ int main(int argc, char **argv) { 
+   QApplication qapp(argc, argv);
+   return 0;
+@@ -100,11 +100,11 @@
+   # list is currently POSIX centric - what happens with Windows?
+   potential_qt_dirs = [
+     "/usr/share/qt3", # Debian unstable
+-    "/usr/share/qt",
++    "/usr/share/qt4",
+     "/usr",
+     "/usr/local",
+     "/usr/lib/qt3", # Suse
+-    "/usr/lib/qt",
++    "/usr/lib/qt4",
+     "/usr/qt/3", # Gentoo
+     "/usr/pkg/qt3" # pkgsrc (NetBSD)
+     ]
+@@ -112,7 +112,7 @@
+   if os.environ.has_key('QTDIR'):
+     potential_qt_dirs.insert(0, os.environ[ 'QTDIR' ])
+   
+-  if env[ 'qt_directory' ] != "/":
++  if env[ 'qt_directory' ] != "/usr":
+      uic_path = os.path.join(env['qt_directory'], 'bin', 'uic')
+      if os.path.isfile(uic_path):
+         potential_qt_dirs.insert(0, env[ 'qt_directory' ])
+@@ -124,16 +124,16 @@
+     context.env.Replace(QTDIR = i)
+     if CheckForQtAt(context, i):
+        # additional checks to validate QT installation
+-       if not os.path.isfile(os.path.join(i, 'bin', 'uic')):
++       if not os.path.isfile(os.path.join(i, 'lib/qt4/bin', 'uic')):
+           print "QT - failed to find uic."
+           return 0
+        if not os.path.isfile(os.path.join(i, 'bin', 'moc')):
+           print "QT - failed to find moc."
+           return 0
+-       if not os.path.exists(os.path.join(i, 'lib')):
++       if not os.path.exists(os.path.join(i, 'lib/qt4')):
+           print "QT - failed to find QT lib path."
+           return 0
+-       if not os.path.exists(os.path.join(i, 'include')):
++       if not os.path.exists(os.path.join(i, 'include/qt4')):
+           print "QT - failed to find QT include path."
+           return 0
+        return 1
