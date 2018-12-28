@@ -1,0 +1,11 @@
+--- a/dtrace.in	2017-10-18 19:59:37.000000000 +0200
++++ b/dtrace.in	2018-04-01 02:30:50.852083183 +0200
+@@ -410,7 +410,7 @@
+         else:
+             print("header: " + fname)
+ 
+-        fname = filename + ".dtrace-temp.c"
++        (ignore, fname) = mkstemp(suffix=".c")
+         fdesc = open(fname, mode='w')
+         providers.semaphore_write(fdesc)
+         fdesc.close()

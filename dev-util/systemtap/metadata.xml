@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>mlen@mlen.pl</email>
+		<name>Mateusz Lenik</name>
+	</maintainer>
+	<longdescription>A linux trace/probe tool</longdescription>
+	<use>
+		<flag name="libvirt">Support probing of libvirt domains.</flag>
+	</use>
+</pkgmetadata>

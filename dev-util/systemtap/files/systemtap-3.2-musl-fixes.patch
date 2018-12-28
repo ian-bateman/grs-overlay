@@ -1,0 +1,19 @@
+--- a/session.cxx	2018-11-29 15:33:12.803995766 -0800
++++ b/session.cxx	2018-11-29 15:40:04.882705588 -0800
+@@ -40,6 +40,7 @@
+ #include <elfutils/libdwfl.h>
+ #include <elfutils/version.h>
+ #include <unistd.h>
++#include <stdlib.h>
+ #include <sys/wait.h>
+ #include <wordexp.h>
+ }
+@@ -1479,7 +1480,7 @@
+ 	  } else {
+ 	      char *spath;
+ 	      assert(optarg);
+-	      spath = canonicalize_file_name (optarg);
++	      spath = realpath(optarg, NULL);
+ 	      if (spath == NULL) {
+ 		  cerr << _F("ERROR: %s is an invalid directory for --sysroot", optarg) << endl;
+ 		  return 1;
